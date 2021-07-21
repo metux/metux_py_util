@@ -33,7 +33,11 @@ class SpecObject(object):
 
     """retrieve a config element as list"""
     def get_cf_list(self, p, dflt = []):
-        return self.get_cf(p, dflt)
+        x = self.get_cf(p, dflt)
+        if x is not None:
+            if isinstance(x, MutableSequence):
+                return x
+            return [x]
 
     """retrieve a config element by path and substitute variables"""
     def get_cf(self, p, dflt = None):
