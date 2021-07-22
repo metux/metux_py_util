@@ -5,11 +5,49 @@ from metux.util.log import info
 def isarray(item):
     return isinstance(item, tuple) or isinstance(item, MutableSequence)
 
+class LambdaBase:
+    def filter_new_item(self, item):
+        if isinstance(item, Mapping):
+            return LambdaDict(item, None, filter = self.filter)
+        if isinstance(item, MutableSequence):
+            return LambdaList(item, filter = self.filter)
+        return item
+
 class LambdaDictFilter:
     def filter_get_res(self, ld, key, val):
         return val
 
-class LambdaDict(dict):
+class LambdaList(MutableSequence, LambdaBase):
+    def __init__(self, lst, filter = None):
+        MutableSequence.__init__(self)
+        self.filter = filter
+        self.my_list = list()
+        if lst is not None:
+            for elem in lst:
+                self.append(elem)
+
+    def __str__(self):
+        return "LambdaList: "+str(self.my_list)
+
+    def __len__(self):
+        return len(self.my_list)
+
+    def __getitem__(self, i):
+        return self.my_list[i]
+
+    def __delitem__(self, i):
+        del self.my_list[i]
+
+    def __setitem__(self, i, v):
+        self.my_list[i] = self.filter_new_item(v)
+
+    def append(self, v):
+        self.my_list.append(self.filter_new_item(v))
+
+    def insert(self, i, v):
+        self.my_list.insert(i, self.filter_new_item(v))
+
+class LambdaDict(dict,LambdaBase):
     def __init__(self, d = None, dflt = None, filter = None):
         self.filter = filter
         self.load_dict(d)
@@ -20,10 +58,7 @@ class LambdaDict(dict):
     def load_dict(self, d):
         if d is not None:
             for k,v in d.iteritems():
-                if isinstance(v, Mapping):
-                    dict.__setitem__(self, k, LambdaDict(v, None, self.filter))
-                else:
-                    dict.__setitem__(self, k, v)
+                dict.__setitem__(self, k, self.filter_new_item(v))
 
     def __getitem_raw__(self, key):
         if dict.has_key(self, key):
@@ -112,7 +147,7 @@ class LambdaDict(dict):
                     raise Exception("cant add elements to non-dict")
             else:
                 sub = LambdaDict({}, None, self.filter)
-                dict.__setitem__(self, key[0], sub)
+                dict.__setitem__(self, key[0], self.filter_new_item(sub))
 
             return sub.__setitem__(key[1:], value)
 
