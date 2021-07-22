@@ -128,7 +128,7 @@ class SpecObject(object):
     def load_spec(self, fn):
         with open(fn) as f:
             # use safe_load instead load
-            self.set_spec(yaml.safe_load(f))
+            self.set_spec(yaml.load(f, yaml.CSafeLoader))
             info("loaded config: "+fn)
 
     """add a default value, which will be used if key is not present"""
