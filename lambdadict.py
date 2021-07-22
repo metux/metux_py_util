@@ -1,6 +1,9 @@
 from inspect import isfunction
-from collections import Mapping
+from collections import Mapping, MutableSequence
 from metux.util.log import info
+
+def isarray(item):
+    return isinstance(item, tuple) or isinstance(item, MutableSequence)
 
 class LambdaDictFilter:
     def filter_get_res(self, ld, key, val):
@@ -32,7 +35,7 @@ class LambdaDict(dict):
         return None
 
     def __getitem__(self, key):
-        if type(key)==tuple or type(key)==list:
+        if isarray(key):
 
             # fetch item from dict
             item = self.__getitem_raw__(key[0])
@@ -76,7 +79,7 @@ class LambdaDict(dict):
 
     """set a default value, which is returned when key not found"""
     def default_set(self, key, value):
-        if type(key)==tuple or type(key)==list:
+        if isarray(key):
             k0 = key[0]
             if len(key) == 1:
                 self.defaults[k0] = value
@@ -97,7 +100,7 @@ class LambdaDict(dict):
 
     """add item to the dict (not default)"""
     def __setitem__(self, key, value):
-        if type(key)==tuple or type(key)==list:
+        if isarray(key):
 
             if len(key) == 1: # final leaf
                 dict.__setitem__(self, key[0], value)
