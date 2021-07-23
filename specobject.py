@@ -1,6 +1,4 @@
 import yaml
-from os import getuid, getcwd, getgid
-from os.path import expanduser
 from metux.util.log import info
 from metux.util.lambdadict import LambdaDict, LambdaDictFilter
 from string import Template
@@ -113,12 +111,6 @@ class SpecObject(object):
     """set spec object"""
     def set_spec(self, s):
         self._my_spec = LambdaDict(s, None, self.filter)
-        self.default_addlist({
-            'user.uid':  lambda: str(getuid()),
-            'user.gid':  lambda: str(getgid()),
-            'user.home': lambda: expanduser('~'),
-            'user.cwd':  lambda: getcwd(),
-        })
 
     """get spec object"""
     def get_spec(self, s):
