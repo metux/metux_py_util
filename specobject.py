@@ -111,6 +111,7 @@ class SpecObject(object):
     """set spec object"""
     def set_spec(self, s):
         self._my_spec = LambdaDict(s, None, self.filter)
+        self.post_init()
 
     """get spec object"""
     def get_spec(self, s):
@@ -136,3 +137,6 @@ class SpecObject(object):
         for a in attrs:
             if not self.has_key(a):
                 raise Exception("missing mandatory attribute %s" % a)
+
+    def post_init(self):
+        pass
