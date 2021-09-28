@@ -75,7 +75,7 @@ class SpecObject(object):
 
     """retrieve a config element by path and substitute variables"""
     def get_cf(self, p, dflt = None):
-        if not isinstance(p, MutableSequence):
+        if not (isinstance(p, MutableSequence) or isinstance(p, tuple)):
             return self.get_cf(p.split('::'), dflt)
 
         walk = self._my_spec
