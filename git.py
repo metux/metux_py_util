@@ -42,7 +42,7 @@ class GitRepo(object):
 
         proc = Popen(self.gitcmd + args, stdout=PIPE, cwd=self.path, env=e)
         (out, err) = proc.communicate()
-        return out.strip()
+        return out.strip().decode()
 
     def get_config(self, key):
         return self._gitout(["config", key])
