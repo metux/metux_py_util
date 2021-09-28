@@ -5,6 +5,11 @@ from string import Template
 from collections import MutableSequence
 import re
 
+try:
+    my_basestring = basestring
+except:
+    my_basestring = str
+
 class SubstTemplate(Template):
     idpattern = r"[_a-zA-Z][_a-zA-Z0-9/\.\-\:]*"
     match_re = re.compile(r'^\$\{([_a-zA-Z][_a-zA-Z0-9/\.\-\:]*)\}$')
@@ -27,7 +32,7 @@ class SpecObjectFilter(LambdaDictFilter):
         return self.subst(value)
 
     def subst(self, value):
-        if isinstance(value, basestring) or (isinstance(value, str)):
+        if isinstance(value, my_basestring) or (isinstance(value, str)):
             res = SubstTemplate.match_re.match(value.strip())
             if res is not None:
                 newkey = res.group(1)
