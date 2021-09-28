@@ -5,7 +5,10 @@ from copy import deepcopy
 from uuid import uuid1
 from metux.util.fs import mkdir, rmtree
 from log import warn
-from exceptions import OSError
+try:
+    from exceptions import OSError
+except ImportError:
+    pass
 
 _devnull = open(devnull, 'w')
 
