@@ -61,7 +61,7 @@ class LambdaDict(dict,LambdaBase):
                 dict.__setitem__(self, k, self.filter_new_item(v))
 
     def __getitem_raw__(self, key):
-        if dict.has_key(self, key):
+        if dict.__contains__(self, key):
             return dict.__getitem__(self, key)
 
         if key in self.defaults:
@@ -92,17 +92,17 @@ class LambdaDict(dict,LambdaBase):
 
         return self.__getitem__(key.split('::'))
 
-    def has_key(self, key):
-        if dict.has_key(self, key):
+    def __contains__(self, key):
+        if dict.__contains__(self, key):
             return True
 
-        if (self.defaults.has_key(key)):
+        if (self.defaults.__contains__(key)):
             return True
 
         return False
 
     def __mksub(self, key):
-        if dict.has_key(self, key):
+        if dict.__contains__(self, key):
             sub = dict.__getitem__(self, key)
             if not isinstance(sub, Mapping):
                 raise Exeption("attemted to add default for a sub-dict defined as scalar")
@@ -141,7 +141,7 @@ class LambdaDict(dict,LambdaBase):
                 dict.__setitem__(self, key[0], value)
                 return
 
-            if dict.has_key(self, key[0]):
+            if dict.__contains__(self, key[0]):
                 sub = dict.__getitem__(self, key[0])
                 if not isinstance(sub, Mapping):
                     raise Exception("cant add elements to non-dict")
