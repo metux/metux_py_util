@@ -57,7 +57,7 @@ class LambdaDict(dict,LambdaBase):
 
     def load_dict(self, d):
         if d is not None:
-            for k,v in d.iteritems():
+            for k,v in d.items():
                 dict.__setitem__(self, k, self.filter_new_item(v))
 
     def __getitem_raw__(self, key):
@@ -130,7 +130,7 @@ class LambdaDict(dict,LambdaBase):
     """add a list of default values"""
     def default_addlist(self, attrs):
         if attrs is not None:
-            for key, value in attrs.iteritems():
+            for key, value in attrs.items():
                 self.default_set(key, value)
 
     """add item to the dict (not default)"""
